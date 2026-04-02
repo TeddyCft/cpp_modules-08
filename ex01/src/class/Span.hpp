@@ -2,6 +2,7 @@
 #define SPAN_HPP
 
 #include <set>
+#include <iterator>
 
 class Span
 {
@@ -11,6 +12,17 @@ class Span
 	std::multiset<int>		_data;
 
 	public:
+
+	//template function must be declared in the hpp in order to be understood by the compiler.
+	template <typename Iterator>
+	void addNumber(Iterator begin, Iterator end)
+	{
+		unsigned int toAdd = static_cast<unsigned int>(std::distance(begin, end));
+		toAdd += this->_data.size();
+		if (toAdd > this->_maxSize)
+			throw Span::spanIsTooShortException();
+		this->_data.insert(begin, end);
+	}
 
 	void	addNumber(int nb);
 	int 	shortestSpan();
@@ -23,13 +35,15 @@ class Span
 	Span &operator=(const Span &og);
 	~Span(void);
 
-	class spanIsFullException : public std::exception
+	class spanIsTooShortException : public std::exception
 	{
 		public :
 		
 		virtual const char *what() const throw()
-		{ return ("This span is full, could not add number"); }
+		{ return ("This span is too short"); }
 	} 	;
 }	;
+
+
 
 #endif

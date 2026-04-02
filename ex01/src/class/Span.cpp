@@ -1,6 +1,8 @@
 #include "Span.hpp"
 #include <iostream>
 
+#define MS_IT_INT std::multiset<int>::const_iterator
+
 //= Operator overloader
 Span	&Span::operator=(const Span &og)
 {
@@ -30,7 +32,7 @@ Span::~Span(void)
 void	Span::addNumber(int nb)
 {
 	if (this->_data.size() == this->_maxSize)
-		throw Span::spanIsFullException();
+		throw Span::spanIsTooShortException();
 	this->_data.insert(nb);
 }
 
@@ -38,8 +40,9 @@ int Span::shortestSpan()
 {
 	if (this->_data.size() < 2)
 		return (0);
-	std::multiset<int>::const_iterator it = this->_data.begin();
-	std::multiset<int>::const_iterator prev = it++;
+
+	MS_IT_INT it = this->_data.begin();
+	MS_IT_INT prev = it++;
 	int shortest = *it - *prev;
 	int diff = shortest;
 	while (true)
@@ -69,14 +72,14 @@ void	Span::print()
 	{
 
 		int count = 0;
-		std::multiset<int>::const_iterator it = this->_data.begin();
+		MS_IT_INT it = this->_data.begin();
 		while (it != this->_data.end())
 		{
-			std::cout << "{" << *it << "} ";
+			if (count && !(count % 10))
+				std::cout << std::endl;
+			std::cout << "{" << *it << "}\t";
 			it++;
 			count++;
-			if (!(count % 10))
-			std::cout << std::endl;
 		}
 	}
 	std::cout << std::endl << "------------" << std::endl;
